@@ -60,15 +60,15 @@ spec:
             failureThreshold: 5
             initialDelaySeconds: 3
             periodSeconds: 3
-      initContainers:
-        - name: wait-for-rabbitmq
-          image: busybox:latest
-          command:
-            ["sh", "-c", "until nc -zv rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done;"]
-          resources:
-            requests:
-              cpu: 1m
-              memory: 50Mi
-            limits:
-              cpu: 75m
-              memory: 128Mi
+      # initContainers:
+      #   - name: wait-for-rabbitmq
+      #     image: busybox:latest
+      #     command:
+      #       ["sh", "-c", "until nc -zv rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done;"]
+      #     resources:
+      #       requests:
+      #         cpu: 1m
+      #         memory: 50Mi
+      #       limits:
+      #         cpu: 75m
+      #         memory: 128Mi
