@@ -1,4 +1,4 @@
-# Part 6: Deploying microservice applications in AKS using Helm Chat and Azure Pipeline(Dynamically update the image tag in values.yaml)
+# Part 15: Deploying microservice applications in kubernetes (minikube) using ArgoCD
 
     Part1:   Manual Deployment (AzCLI + Docker Desktop + kubectl)  
     GitHub:  https://github.com/santosh-gh/k8s-01
@@ -153,11 +153,6 @@
     # Product service: Shows product information.
     # Order service: Places orders.
     # RabbitMQ: Message queue for an order queue.
-
-
-# Directory Structure
-
-![Directory Structure](image.png)
 
 # Tetechnology Stack
    
