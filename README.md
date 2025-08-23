@@ -111,24 +111,24 @@
     GitHub:  https://github.com/santosh-gh/k8s-14
     YouTube: https://www.youtube.com/watch?v=VAiR3sNavh0
 
-    Part15: ArgoCD   
-
+    Part15: ArgoCD
 
             Manual methods: Best for learning, experimentation, and very small projects.
-            Automated methods: Best for production, team collaboration, and scaling.         
+            Automated methods: Best for production, team collaboration, and scaling.   
+
+            kubectl: Simple no extra tools or templating engines needed.
+
+            Helm:  Best for packaging, reusability, upgrades and rollbacks.                    
+                can use reusable and ready-made chart.
+
+            Kustomize: Best for environment-specific overlays without duplicating YAML.
+                    Patch existing YAMLs for different environments.
+                    Powerful when you need to tweak a vendor Helm chart
+
+            Helm + Kustomize: Very flexible, but complex; fits for large enterprises.
+
 
             # Traditional Deployment: PUSH Approach
-
-                kubectl: Simple no extra tools or templating engines needed.
-
-                Helm:  Best for packaging, reusability, upgrades and rollbacks.                    
-                    can use reusable and ready-made chart.
-
-                Kustomize: Best for environment-specific overlays without duplicating YAML.
-                        Patch existing YAMLs for different environments.
-                        Powerful when you need to tweak a vendor Helm chart
-
-                Helm + Kustomize: Very flexible, but complex; fits for large enterprises.           
 
               - Requires the pipeline runner or command line to have cluster credentials
               - The live state may drift from the intended state
