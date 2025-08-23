@@ -224,8 +224,7 @@
 
     After creating the application, you will see it listed on the dashboard. 
     Click on the Sync button to deploy the application. 
-    Argo CD will pull the manifests from the Git repository and apply them to the Minikube cluster.
-    
+    Argo CD will pull the manifests from the Git repository and apply them to the Minikube cluster.    
 
 # minikube cluster
 
