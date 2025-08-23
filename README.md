@@ -4,9 +4,17 @@
     GitHub:  https://github.com/santosh-gh/k8s-01
     YouTube: https://youtu.be/zoJ7MMPVqFY
 
+             - Good for learning and small projects.
+             - Error-prone due to manual steps.
+             - Not scalable for teams or large projects.
+
     Part2:   Automated Deployment (AzCLI + Docker + kubect + Azure Pipeline)
     GitHub:  https://github.com/santosh-gh/k8s-02
     YouTube: https://youtu.be/nnomaZVHg9I
+
+            - Faster, repeatable deployments.
+            - Reduces human error.
+            - Integrates CI/CD best practices.
 
     Part3:   Automated Infra Deployment (Bicep + Azure Pipeline)
     GitHub:  https://github.com/santosh-gh/k8s-03
@@ -16,9 +24,22 @@
     GitHub:  https://github.com/santosh-gh/k8s-04
     YouTube: https://www.youtube.com/watch?v=VAiR3sNavh0
 
+             - need to maintain separate files for each environment.
+             - No concept of packaging/distribution.
+             - no built-in rollback or release tracking.
+
     Part5:   Automated Deployment (AzCLI + Docker + Helm charts + kubectl + Azure Pipeline) 
     GitHub:  https://github.com/santosh-gh/k8s-04
     YouTube: https://www.youtube.com/watch?v=MnWe2KGRrxg&t=883s
+
+             - Helm uses templates and values (values.yaml) ? same chart can deploy multiple 
+               environments (dev, staging, prod) with different configs.
+             - Helm packages apps as charts, which can be versioned, shared, and 
+               stored in repositories (like Docker images).
+             - Helm tracks releases ? easy to upgrade, rollback, and list installed versions 
+               (helm upgrade, helm rollback).               
+             - Helm can bundle multiple Kubernetes resources (Deployments, Services, Ingress, ConfigMaps, etc.) 
+               into a single chart ? deploy everything with one command.
 
     Part6:   Automated Deployment (AzCLI + Docker + Helm charts + kubectl + Azure Pipeline) 
              Dynamically update the image tag in values.yaml
@@ -48,11 +69,47 @@
     GitHub:  https://github.com/santosh-gh/k8s-09
     YouTube: https://www.youtube.com/watch?v=Jtz1KldOPAA&t=1s
 
+             - Overlay-based approach makes managing multiple environments (dev, staging, prod) 
+               straightforward via Git branches/overlays.
+
     Part10:  Automated Deployment (AzCLI + Docker + kustomize + kubectl + Azure Pipeline)          
              Deploy into multiple environments (dev, test, prod) through automated pipeline
 
     GitHub:  https://github.com/santosh-gh/k8s-10
     YouTube: https://www.youtube.com/watch?v=m5ZXmOk0IBs&t=43s
+
+    Part11:  Manual Deployment (AzCLI + Docker + Helm + kustomize + kubectl)          
+             Deploy into multiple environments (dev, test, prod) using command line tools.
+
+             - Helm = packaging + release mgmt (install/upgrade/rollback)
+             - Kustomize = environment overlays (patches/config differences)
+             - Together = scalable, reusable, environment-flexible microservice deployment strategy
+
+
+    GitHub:  https://github.com/santosh-gh/k8s-11
+    YouTube: https://www.youtube.com/watch?v=ZNHoZ_b85DQ&t=1s
+
+    Part12:  Automated Deployment (AzCLI + Docker + Helm + kustomize + kubectl)
+             Template First approach 
+             Dynamically update the image tag in deploy.yaml         
+             Deploy into multiple environments (dev, test, prod) using Azure Pipeline.
+
+    GitHub:  https://github.com/santosh-gh/k8s-12
+    YouTube: https://www.youtube.com/watch?v=qxJyTHzWG4U
+
+    Part13:  Manual Deployment (AzCLI + Docker + Helm + kustomize + kubectl)
+             Overlay First approach             
+             Deploy into multiple environments (dev, test, prod) thorough commands.
+
+    GitHub:  https://github.com/santosh-gh/k8s-13
+    YouTube: https://www.youtube.com/watch?v=9uAM8FgNGmI&t=113s
+
+    Part14:  Automated Deployment (AzCLI + Docker + Helm + kustomize + kubectl)
+             Overlay First approach             
+             Deploy into multiple environments (dev, test, prod) thorough Azure Pipeline.
+
+    GitHub:  https://github.com/santosh-gh/k8s-14
+    YouTube: https://www.youtube.com/watch?v=VAiR3sNavh0
 
 # Architesture
 
