@@ -111,6 +111,40 @@
     GitHub:  https://github.com/santosh-gh/k8s-14
     YouTube: https://www.youtube.com/watch?v=VAiR3sNavh0
 
+    Part15: ArgoCD   
+
+
+            Manual methods: Best for learning, experimentation, and very small projects.
+            Automated methods: Best for production, team collaboration, and scaling.         
+
+            # Traditional Deployment: PUSH Approach
+
+                kubectl: Simple no extra tools or templating engines needed.
+
+                Helm:  Best for packaging, reusability, upgrades and rollbacks.                    
+                    can use reusable and ready-made chart.
+
+                Kustomize: Best for environment-specific overlays without duplicating YAML.
+                        Patch existing YAMLs for different environments.
+                        Powerful when you need to tweak a vendor Helm chart
+
+                Helm + Kustomize: Very flexible, but complex; fits for large enterprises.           
+
+              - Requires the pipeline runner or command line to have cluster credentials
+              - The live state may drift from the intended state
+              - Rollback means re-running a previous pipeline, manually applying manifests, or 
+                keeping Helm release history.
+              - Usually requires custom scripting to target multiple clusters (e.g., staging, prod).
+
+            # GitOps(ArgoCD) Deployment: PULL Approach
+              
+              - Runs inside the cluster and pulls changes from Git.
+              - Git is the single source of truth for manifests.
+                Detects drift and can automatically fix it.
+              - Simply revert the Git commit, Argo syncs back to the previous state.
+              - Can promote changes from dev -> test -> prod simply by managing Git branches or directories.
+              - Provides a dashboard/UI showing real-time status (Healthy, OutOfSync, Degraded).
+
 # Architesture
 
 ![Store Architesture](aks-store-architecture.png)
@@ -126,180 +160,80 @@
 ![Directory Structure](image.png)
 
 # Tetechnology Stack
-
-    Azure Pipelines
-    Infra (AzCLI/Bicep)
-    AKS
-    ACR
-    HelmChart
-    Helmify
-
-# Steps
-
-    1. Infra deployment using AzCLI/Bicep command line or 
-       Pipelines azcli-infra-pipeline.yml/bicep-infra-pipeline.yml
-
-    2. Build and push images to ACR: CI Pipelines
-       order-pipeline.yml, product-pipeline.yml, store-front-pipeline.yml
-
-    3. Helm install and Helmfy
-       https://helm.sh/docs/intro/install/
-
-       https://github.com/arttor/helmify/releases
-
-       Advantages of helm over kubectl
-
-       Helm uses templates with variables, so no need to duplicate YAML files for each environment
-
-       Helm supports versioned releases and can be roll back to a previous release easily
-
-       helm list
-       helm rollback online-store 1
-
-       Parameterization per Environment using enverionment  specific values.yaml
-       helm install online-store ./helmchart -f dev-values-.yaml
-       helm install online-store ./helmchart -f test-values.yaml
-
-       Helm keeps track of installed releases, values, and history
-       helm list
-       helm get all online-store
-
-    4. App deployment: CD Pipelines
-       app-deploy-pipeline.yml
-
-    5. Validate and Access the application
-
-    6. Clean the Azure resources
-    
-# Infra deployment
-
-    # Login to Azure
-
-        az login
-        az account set --subscription=<subscriptionId>
-        az account show
-
-    # Show existing resources
-
-        az resource list
-
-    # Create RG, ACR and AKS
-
-        # AzCLI
-        ./infra/azcli/script.sh
-
-        OR
-
-        # Bicep
-        az deployment sub create --location uksouth --template-file ./infra/bicep/main.bicep --parameters ./infra/bicep/main.bicepparam
-
-    # Connect to cluster
-
-        RESOURCE_GROUP="rg-onlinestore-dev-uksouth-001"
-        AKS_NAME="aks-onlinestore-dev-uksouth-001"
-        az aks get-credentials --resource-group $RESOURCE_GROUP --name $AKS_NAME --overwrite-existing
-
-        alias k=kubectl
-
-    # Short name for kubectl
-
-    # Show all existing objects
-
-        k get all   
-
-
-# Docker Build and Push
-
-    # Log in to ACR
-
-        ACR_NAME="acronlinestoredevuksouth001"
-        az acr login --name $ACR_NAME
-
-    # Build and push the Docker images to ACR
-
-        # Order Service
-        docker build -t order ./app/order-service 
-        docker tag order:latest $ACR_NAME.azurecr.io/order:v1
-        docker push $ACR_NAME.azurecr.io/order:v1
-
-        # Product Service
-        docker build -t product ./app/product-service 
-        docker tag product:latest $ACR_NAME.azurecr.io/product:v1
-        docker push $ACR_NAME.azurecr.io/product:v1
-
-        # Store Front Service
-        docker build -t store-front ./app/store-front 
-        docker tag store-front:latest $ACR_NAME.azurecr.io/store-front:v1
-        docker push $ACR_NAME.azurecr.io/store-front:v1
-
-        docker images
-
-
-# Helm and Helmify
-
-    # helmify
-
-    helmify -f ./manifests/order ./storehelmchart/order
-
-    helmify -f ./manifests/product ./storehelmchart/product
-
-    helmify -f ./manifests/store-front ./storehelmchart/store-front
-
-    helmify -f ./manifests/rabbitmq ./storehelmchart/rabbitmq
-
-    helmify -f ./manifests/config ./storehelmchart/config
-
-    # Helm Deploy
-
-    helm install config ./storehelmchart/config -n dev
-    helm install rabbitmq ./storehelmchart/rabbitmq -n dev
-    helm install order ./storehelmchart/order -n dev
-    helm install product ./storehelmchart/product -n dev
-    helm install store-front ./storehelmchart/store-front -n dev
    
+    minikube
+    docker desktop
+    docker hub
+    git hub
+    kubectl   
 
-    # Delete Services using helm        
-     
-    helm uninstall order
-    helm uninstall product
-    helm uninstall store-front
-    helm uninstall rabbitmq
-    helm uninstall config
+# Step 1: Start Minikube
 
-# Verify the Deployment
+    First, start Minikube. 
 
-    k get pods
-    k get services
-    curl <LoadBalancer public IP>:80
-    Browse the app using http://<LoadBalancer public IP>:80
+    minikube start    
 
-# Clean the Azure resources
+# Step 2: Create a Namespace for Argo CD
 
-    az group delete --name rg-onlinestore-dev-uksouth-001 --yes --no-wait
+    Create a separate namespace for Argo CD.
 
+    kubectl create namespace argocd
+    
+# Step 3: Install Argo CD
+    
+    Install Argo CD
 
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
-    k apply -f ./manifests/config -n dev
-    k apply -f ./manifests/rabbitmq -n dev
-    k apply -f ./manifests/order -n dev
-    k apply -f ./manifests/product -n dev
-    k apply -f ./manifests/store-front -n dev
+    kubectl get all -n argocd
 
+# Step 4: Expose the Argo CD Server
 
-    k apply -f ./manifests/config -n test
-    k apply -f ./manifests/rabbitmq -n test
-    k apply -f ./manifests/order -n test
-    k apply -f ./manifests/product -n test
-    k apply -f ./manifests/store-front -n test
+    Get the service URL:
 
-    k apply -f ./manifests/config -n prod
-    k apply -f ./manifests/rabbitmq -n prod
-    k apply -f ./manifests/order -n prod
-    k apply -f ./manifests/product -n prod
-    k apply -f ./manifests/store-front -n prod
+    minikube service argocd-server -n argocd --url
 
+    To access the Argo CD web interface, expose the Argo CD server using the kubectl port-forward command:
 
+    kubectl port-forward svc/argocd-server -n argocd 8080:443
 
+    This command forwards the port 8080 on the local machine to port 443 of the Argo CD server.
+
+# Step 5: Log in to Argo CD
+
+    Browse to https://localhost:8080.
+
+    Retrieve the password using the following command:
+
+    kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d; echo
+
+    The output will be the name of the Argo CD server pod. Use this name as the password. The default username is admin.
+
+# Step 6: Connect a Git Repository
+
+    Connect a Git repository to Argo CD. This repository should contain the Kubernetes manifests for the applications you want to deploy.
+
+    In the Argo CD web interface, click on New Repository.
+    Cretae new app
+    Fill in the details like Application Name, Project, Sync Policy, and the Git repository URL.
+    Specify the path within the repository where the manifests are stored.
+    Choose the destination cluster and namespace.
+    Click on Create to create the application.
+
+# Step 7: Sync the Application
+
+    After creating the application, you will see it listed on the dashboard. 
+    Click on the Sync button to deploy the application. 
+    Argo CD will pull the manifests from the Git repository and apply them to the Minikube cluster.
+    
+
+# minikube cluster
+
+  alias k=kubectl
+
+# Docker Build and Push to Docker Hub
+
+    # Order Service
     docker build -t order ./app/order-service 
     docker tag order:latest e880613/order:v1
     docker push e880613/order:v1
@@ -312,4 +246,4 @@
     # Store Front Service
     docker build -t store-front ./app/store-front 
     docker tag store-front:latest e880613/store-front:v1
-    docker push e880613/store-front:v1    
+    docker push e880613/store-front:v1 
